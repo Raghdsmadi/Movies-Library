@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "movies-library",
+  "description": "",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raghdsmadi/Movies-Library.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Raghdsmadi/Movies-Library/issues"
+  },
+  "homepage": "https://github.com/Raghdsmadi/Movies-Library#readme"
+}
