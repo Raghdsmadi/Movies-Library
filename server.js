@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express(); 
 const PORT = 3000;
-const movieData = require('./Movie Data/data.json');
+const movieData = require('./MovieData/Data.json');
 
 
 
@@ -20,7 +20,7 @@ function handleListener() {
 }
 
 function handleFavorite(reg, res) {
-    res.send("Welcom to Favorit page");
+    res.send("Welcome to Favorit page");
 }
 
 function handleData(req, res) {
