@@ -1,4 +1,5 @@
 'use strict'
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
@@ -29,18 +30,20 @@ app.get('/favorite', handleFavorite);
 app.get('/', handleData);
 app.get('/trending', trendingHandler)
 app.get('/search', searchTrendingHandler)
+
 app.post('/postMovies', postHandler);
 app.get('/getData', getHandler);
-app.use('/error', (req, res) => res.send(error()));
-app.get('*', handelNotFound);
-//app.use(handleError);
+
+
+
 
 
 
 
 /*function handleListener() {
-    console.log(`i am a live on port ${PORT}`);
-}*/
+
+function handleListener() {
+
 
 function handleFavorite(reg, res) {
     res.send("Welcome to Favorit page");
@@ -52,6 +55,7 @@ function handleData(req, res) {
     let newMovie = new Movie(movieData.title, movieData.poster_path, movieData.overview);
     result.push(newMovie);
     res.json(result);
+
 }
 
 function handelNotFound(req, res) {
@@ -61,12 +65,14 @@ function handelNotFound(req, res) {
 }
 
 
+
 app.use(function (err, req, res, text) {
     console.log(err.stack);
     res.type('taxt/plain');
     res.status(500);
     res.send("Sorry something wrong");
 });
+
 
 function Movie(id ,title,release_date, poster_path, overview) {
     this.id = id;
@@ -152,9 +158,13 @@ function getHandler(req, res) {
  } 
 
 
+
 client.connect().then(() => {
     
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     })
 })
+
+
+
