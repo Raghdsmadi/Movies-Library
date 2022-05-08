@@ -90,7 +90,6 @@ function trendingHandler(req, res) {
     let result = [];
     
     axios.get(`https://api.themoviedb.org/3/trending/all/week?api_key=${APIKEY}`)
-    //axios.get(`https://api.themoviedb.org/3/trending/all/week?api_key=37ddc7081e348bf246a42f3be2b3dfd0&language=en-US`)
         .then(apiResponse => {
             apiResponse.data.results.map(value => {
                 let oneTrend = new Movie(value.id, value.title, value.release_date, value.poster_path, value.overview);
@@ -105,7 +104,6 @@ function searchTrendingHandler(req, res) {
     const search = req.query.data
     let results = [];
  console.log(search,APIKEY);
-  //axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&query=${search}`)
  axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${APIKEY}&language=en-US&query=${search}`)
         .then(apiResponse => {
            let data=  apiResponse.data 
