@@ -2,34 +2,48 @@
 
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+
 const axios = require("axios").default;
 require("dotenv").config();
 const PORT = 3000;
 const app = express();
 app.use(cors());
 let APIKEY =process.env.APIKEY ;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+let url = "postgres://raghd:12345@localhost:5432/movies";
+//app.use(express.json());
+const { Client } = require('pg');
+const client = new Client(url);
 //console.log(APIKEY)
 
 //const P = process.env.P;
 
 //dotenv.config();
 
-app.listen(PORT, handleListener);
+
+//app.listen(PORT, handleListener);
 app.use(cors());
 app.get('/favorite', handleFavorite);
 app.get('/', handleData);
 app.get('/trending', trendingHandler)
 app.get('/search', searchTrendingHandler)
 
-app.use('/error', (req, res) => res.send(error()));
-app.get('*', handelNotFound);
+app.post('/postMovies', postHandler);
+app.get('/getData', getHandler);
 
 
 
+
+
+
+
+/*function handleListener() {
 
 function handleListener() {
-    console.log(`i am a live on port ${PORT}`);
-}
+
 
 function handleFavorite(reg, res) {
     res.send("Welcome to Favorit page");
@@ -68,6 +82,16 @@ function Movie(id ,title,release_date, poster_path, overview) {
     this.overview = overview;
 
 }
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).send({
+        error: {
+            status: error.status ||500,
+            message: error.message || 'Internal Server Error',
+        },
+    });
+}) ;
+
 function trendingHandler(req, res) {
     let result = [];
     
@@ -102,8 +126,45 @@ function searchTrendingHandler(req, res) {
         })
 }
 
+function postHandler(req, res) {
+    console.log(req.body);
+   /*  let Name = req.body.Name;
+     let Geners = req.body.Geners;
+     let Duration = req.body.Duration;
+     let Rating = req.body.Rating;*/
+let {name,Geners,Duration,Rating} = req.body; //destructuring
 
 
+let sql = `INSERT INTO movieStore(name,Geners,Duration,Rating ) VALUES($1, $2, $3, $4) RETURNING *;`; 
+   let values = [name,Geners,Duration,Rating];
+   
+    client.query(sql, values).then(result => {
+        console.log(result);
+        return res.status(201).json(result.rows);
+
+    }).catch(error => {res.send("error in getting data from API")
+    })
+
+}
+
+function getHandler(req, res) {
+    let sql = `SELECT * FROM movieStore ;`;
+    client.query(sql).then((result)=>{
+        console.log(result);
+        res.json(result.rows);
+    }).catch((error) => {
+        res.send("error in getting data from API")
+    })
+ } 
+
+
+
+client.connect().then(() => {
+    
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    })
+})
 
 
 
