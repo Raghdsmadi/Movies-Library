@@ -122,10 +122,7 @@ function searchTrendingHandler(req, res) {
 
 function postHandler(req, res) {
     console.log(req.body);
-   /*  let Name = req.body.Name;
-     let Geners = req.body.Geners;
-     let Duration = req.body.Duration;
-     let Rating = req.body.Rating;*/
+   
 let {name,Geners,Duration,Rating} = req.body; //destructuring
 
 
