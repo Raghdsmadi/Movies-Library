@@ -34,8 +34,12 @@ app.get('/search', searchTrendingHandler)
 app.post('/postMovies', postHandler);
 app.get('/getData', getHandler);
 
-
-
+app.put('/UPDATE/:id',updateHandler);
+app.delete('/delete/:id', handleDelete);
+app.get("/getMovie/:id", getMovieIdHandler);
+app.use('/error', (req, res) => res.send(error()));
+app.get('*', handelNotFound);
+//app.use(handleError);
 
 
 
@@ -127,11 +131,11 @@ function searchTrendingHandler(req, res) {
 function postHandler(req, res) {
     console.log(req.body);
    
-let {name,Geners,Duration,Rating} = req.body; //destructuring
+let {name,Geners,Duration,Rating,comments} = req.body; //destructuring
 
 
-let sql = `INSERT INTO movieStore(name,Geners,Duration,Rating ) VALUES($1, $2, $3, $4) RETURNING *;`; 
-   let values = [name,Geners,Duration,Rating];
+let sql = `INSERT INTO movieStore(name,Geners,Duration,Rating,comments) VALUES($1, $2, $3, $4, $5) RETURNING *;`; 
+   let values = [name,Geners,Duration,Rating,comments];
    
     client.query(sql, values).then(result => {
         console.log(result);
@@ -152,6 +156,50 @@ function getHandler(req, res) {
     })
  } 
 
+ function updateHandler(req,res){
+let id = req.params.id;
+//let movies= req.body ;
+let {name,Geners,Duration,Rating,comments} = req.body;
+let sql = `UPDATE movieStore SET name=$1,Geners=$2,Duration=$3,Rating=$4,comments=$5 WHERE id=${id} RETURNING *`;
+let values = [name,Geners,Duration,Rating,comments];
+client.query(sql, values).then(result => {
+    console.log(result.rows);
+    res.json(result.rows);
+}).catch()
+
+}
+
+
+
+ function handleDelete(req, res) {
+    let id = req.params.id;
+    let sql = `DELETE FROM movieStore WHERE id=${id} RETURNING *`;
+    client.query(sql).then(result => {
+        console.log(result.rows[0]);
+        res.status(204).json([]);
+    }).catch(err => {
+        console.log(err);
+    })
+}
+
+function getMovieIdHandler(req, res)
+{
+
+  // console.log(res);
+  
+    const id = req.params.id;
+    //console.log(id);
+    const sql = `SELECT * FROM movieStore WHERE id=${id};`
+
+    client.query(sql).then(data => {
+        console.log(data.rows);
+        res.status(200).json(data.rows);
+    })
+    .catch(error => {
+        console.log(error);
+        errorHandler(error, req, res);
+    })
+}
 
 
 client.connect().then(() => {
